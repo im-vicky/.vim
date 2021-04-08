@@ -1,0 +1,100 @@
+{
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "One Dark Pro",
+    "tabnine.experimentalAutoImports": true,
+    "editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
+    "update.enableWindowsBackgroundUpdates": false,
+    "update.mode": "manual",
+    "editor.linkedEditing": true,
+    "gitlens.defaultDateFormat": null,
+   
+    "vim.leader": "<space>",
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.surround": true,
+    "vim.useCtrlKeys": false,
+    "vim.useSystemClipboard": true,
+    "vim.highlightedyank.enable": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["H"],
+            "after": ["^"]
+        },
+        {
+            "before": ["L"],
+            "after": ["$"]
+        },
+        {
+            "before": ["s"],
+            "after": ["<space>", "<space>", "s"]
+        },
+        {
+            "before": ["U"],
+            "after": ["C-r"]
+        },
+        {
+            "before": ["J"],
+            "after": ["1","0","j"]
+        },
+        {
+            "before": ["K"],
+            "after": ["1", "0","k"]
+        },
+        {
+            "before": ["("],
+            "commands": [
+                {
+                    "command": "workbench.action.openPreviousRecentlyUsedEditor",
+                    "args": []
+                }
+            ]
+         },
+         {
+            "before": [")"],
+            "commands": [
+                {
+                    "command": "workbench.action.openNextRecentlyUsedEditor",
+                    "args": []
+                }
+            ]
+         },
+         {
+            "before": ["leader", "q"],
+            "commands": [
+                {
+                    "command": "workbench.action.closeActiveEditor",
+                    "args": []
+                },
+                {
+                    "command": "workbench.action.files.save",
+                    "args": []
+                }
+            ]
+         },
+
+    ],
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["k", "k"],
+            "after": ["<Esc>"]
+        },
+        {
+            "before": ["j", "j"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "files.autoSave": "afterDelay",
+    "prettier.tabWidth": 4,
+    "[json]": {
+
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace",
+        "gitlens.codeLens.scopes": [
+            "document"
+        ]
+    },
+    "editor.wordWrap": "on"
+}
