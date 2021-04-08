@@ -8,10 +8,18 @@ set number
 set ignorecase
 set smartcase
 set scrolloff=3 " 3 lines above/below cursor when scrolling
+set showmode
 
 " Emulated Plugins
 set surround
 set easymotion
+set NERDTree
+set commentary
+set argtextobj
+set ReplaceWithRegister
+set textobj-entire
+set multiple-cursors
+
 
 " Copy to system clipboard as well
 set clipboard+=unnamed
@@ -19,110 +27,40 @@ set clipboard+=unnamed
 " Use Idea to join lines smartly
 set ideajoin
 
-" Multiple cursors support
-set multiple-cursors
-
-" These settings are from - https://github.com/Valloric/dotfiles/blob/master/intellij/ideavimrc
-
 " let mapleader = ","
 let mapleader = " "
 " let maplocalleader = ","
 
-let g:EasyMotion_override_acejump = 0
+" let g:EasyMotion_override_acejump = 0
 
 imap jj <Esc>
 imap kk <Esc>
 
 " These create newlines like o and O but stay in normal mode
-nmap <leader>isj o<Esc>k
-
-
-" key bindings for quickly moving between windows
-
-" h left, l right, k up, j down
-" nmap <leader>h <c-w>h
-" nmap <leader>l <c-w>l
-nmap ( :action JumpToLastChange<cr>
-nmap ) :action JumpToNextChange<cr>
-nmap <leader>f /
-nmap <leader>h ^
-nmap <leader>l $
-nmap <leader>e :action GotoNextError<cr>
-nmap <leader>E :action GotoPreviousError<cr>
+nmap H ^
+nmap L $
 nmap J 10gj
 nmap K 10gk
-" Navigation
-nmap s <leader><leader>s
 nmap m :action MethodDown<cr>
 nmap M :action MethodUp<cr>
 nmap U :action $Redo<cr>
-nmap H :action PreviousTab<cr>
-nmap L :action NextTab<cr>
 nmap R :action Replace<cr>
-syntax on
-set incsearch
-set visualbell
-set noerrorbells
-set highlightedyank
-set relativenumber
-set number
-set ignorecase
-set smartcase
-set scrolloff=3 " 3 lines above/below cursor when scrolling
-
-" Emulated Plugins
-set surround
-set easymotion
-
-" Copy to system clipboard as well
-set clipboard+=unnamed
-
-" Use Idea to join lines smartly
-set ideajoin
-
-" Multiple cursors support
-set multiple-cursors
-
-" These settings are from - https://github.com/Valloric/dotfiles/blob/master/intellij/ideavimrc
-
-" let mapleader = ","
-let mapleader = " "
-" let maplocalleader = ","
-
-let g:EasyMotion_override_acejump = 0
-
-imap jk <Esc>
-imap kj <Esc>
-
-" These create newlines like o and O but stay in normal mode
-nmap <leader>isj o<Esc>k
-
-
-" key bindings for quickly moving between windows
-
-" h left, l right, k up, j down
-" nmap <leader>h <c-w>h
-" nmap <leader>l <c-w>l
-
-nmap <leader>f /
+" NERDTree Toggle"
+nmap <leader>n :NERDTreeToggle<cr>
+" Closing tabs
+nmap <leader>q :action CloseContent<cr>
+nmap <leader>Q :action ReopenClosedTab<cr>
+" Navigating errors
+nmap <leader>e :action GotoNextError<cr>
+nmap <leader>E :action GotoPreviousError<cr>
 nmap <leader>h :action JumpToLastChange<cr>
 nmap <leader>l :action JumpToNextChange<cr>
-nmap <leader>e :action GotoNextError<cr>
-nmap <leader>E :action GotoPreviousError<cr>
-nmap J 10gj
-nmap K 10gk
-" Navigation
+nmap <leader>f /
+nmap ( :action PreviousTab<cr>
+nmap ) :action NextTab<cr>
+nmap <leader>isj o<Esc>k
+nmap <leader>isk O<Esc>j
 nmap s <leader><leader>s
-nmap m :action MethodDown<cr>
-nmap M :action MethodUp<cr>
-nmap U :action $Redo<cr>
-nmap H :action PreviousTab<cr>
-nmap L :action NextTab<cr>
-nmap R :action Replace<cr>
-
-" Closing tabs
-nmap <leader>q :action CloseContent<cr>
-nmap <leader>Q :action ReopenClosedTab<cr>
 
 " To navigate between split panes
 nmap <leader>wj :action NextSplitter<cr>
@@ -135,9 +73,6 @@ nmap <leader>wc :action Unsplit<cr>
 nmap <leader>wC :action UnsplitAll<cr>
 nmap <leader>wd :action OpenEditorInOppositeTabGroup<cr>
 
-
-
-
 " Refactorings
 nmap <leader>re :action RenameElement<cr>
 nmap <leader>rg :action Generate<cr>
@@ -146,68 +81,17 @@ nmap <leader>rg :action Generate<cr>
 "nmap <leader>gc :action Vcs.Show.Local.Changes<cr>
 nmap <leader>ga :action Vcs.QuickListPopupAction<cr>
 nmap <leader>gl :action Vcs.Show.Log<cr>
-"nmap <leader>gd :action Compare.LastVersion<cr>
+nmap <leader>gd :action Compare.LastVersion<cr>
 
-nmap <leader>gd :action GotoImplementation<cr>
 
 " Terminal
  nmap <leader>T :action ActivateTerminalToolWindow<cr>
 
-" Search
-
-
 " Building, Running and Debugging
-nmap ,c :action CompileDirty<cr>
 nmap ,r :action Run<cr>
-nmap ,b :action Debug<cr>
-nmap ,c :action RunClass<cr>
-nmap ,d :action DebugClass<cr>
-nmap ,t :action RerunTests<cr>
-nmap ,T :action RerunFailedTests<cr>
+nmap ,d :action Debug<cr>
 
-
-" Closing tabs
-nmap <leader>q :action CloseContent<cr>
-nmap <leader>Q :action ReopenClosedTab<cr>
-
-" To navigate between split panes
-nmap <leader>wj :action NextSplitter<cr>
-nmap <leader>wk :action PrevSplitter<cr>
-
-" Splits manipulation
-nmap <leader>wh :action SplitHorizontally<cr>
-nmap <leader>wv :action SplitVertically<cr>
-nmap <leader>wc :action Unsplit<cr>
-nmap <leader>wC :action UnsplitAll<cr>
-nmap <leader>wd :action OpenEditorInOppositeTabGroup<cr>
-
-
-
-
-" Refactorings
-nmap <leader>re :action RenameElement<cr>
-nmap <leader>rg :action Generate<cr>
-
-" VCS operations
-"nmap <leader>gc :action Vcs.Show.Local.Changes<cr>
-nmap <leader>ga :action Vcs.QuickListPopupAction<cr>
-nmap <leader>gl :action Vcs.Show.Log<cr>
-"nmap <leader>gd :action Compare.LastVersion<cr>
-
-nmap <leader>gd :action GotoImplementation<cr>
-
-" Terminal
- nmap <leader>T :action ActivateTerminalToolWindow<cr>
-
-" Search
-
-
-" Building, Running and Debugging
-nmap ,c :action CompileDirty<cr>
-nmap ,r :action Run<cr>
-nmap ,b :action Debug<cr>
-nmap ,c :action RunClass<cr>
-nmap ,d :action DebugClass<cr>
-nmap ,t :action RerunTests<cr>
-nmap ,T :action RerunFailedTests<cr>
-
+vmap H ^
+vmap L $
+vmap J 10gj
+vmap K 10gk
