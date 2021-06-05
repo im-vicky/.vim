@@ -7,7 +7,7 @@ set relativenumber
 set number
 set ignorecase
 set smartcase
-set scrolloff=3 " 3 lines above/below cursor when scrolling
+set scrolloff=5 " 5 lines above/below cursor when scrolling
 set showmode
 
 " Emulated Plugins
@@ -20,6 +20,7 @@ set ReplaceWithRegister
 set textobj-entire
 set multiple-cursors
 
+" ShowIntentionActions
 
 " Copy to system clipboard as well
 set clipboard+=unnamed
@@ -37,10 +38,16 @@ imap jj <Esc>
 imap kk <Esc>
 
 " These create newlines like o and O but stay in normal mode
+nmap q <Esc>
+nmap f <leader><leader>w
+nmap F <leader><leader>b
+nmap <leader>j <leader><leader>j
+nmap <leader>k <leader><leader>k
 nmap H ^
 nmap L $
-nmap J 10gj
-nmap K 10gk
+nmap J 10j
+nmap K 10k
+nmap B %
 nmap m :action MethodDown<cr>
 nmap M :action MethodUp<cr>
 nmap U :action $Redo<cr>
@@ -63,8 +70,8 @@ nmap <leader>isk O<Esc>j
 nmap s <leader><leader>s
 
 " To navigate between split panes
-nmap <leader>wj :action NextSplitter<cr>
-nmap <leader>wk :action PrevSplitter<cr>
+nmap ;j :action NextSplitter<cr>
+nmap ;k :action PrevSplitter<cr>
 
 " Splits manipulation
 nmap <leader>wh :action SplitHorizontally<cr>
@@ -75,21 +82,19 @@ nmap <leader>wd :action OpenEditorInOppositeTabGroup<cr>
 
 " Refactorings
 nmap <leader>re :action RenameElement<cr>
-nmap <leader>rg :action Generate<cr>
 
-" VCS operations
-"nmap <leader>gc :action Vcs.Show.Local.Changes<cr>
-nmap <leader>ga :action Vcs.QuickListPopupAction<cr>
+" Code generator
+nmap <leader>gc :action Generate<cr>
 nmap <leader>gl :action Vcs.Show.Log<cr>
-nmap <leader>gd :action Compare.LastVersion<cr>
-
+nmap <leader>gd :action com.github.setial.intellijjavadocs.action.JavaDocsGenerateActionOnEditor<cr>
 
 " Terminal
- nmap <leader>T :action ActivateTerminalToolWindow<cr>
-
-" Building, Running and Debugging
-nmap ,r :action Run<cr>
-nmap ,d :action Debug<cr>
+ nmap <leader>t :action SearchEverywhere<cr>
+" Building, Running and Reformatting
+nmap ;r :action Run<cr>
+nmap ;d :action Debug<cr>
+nmap ;f :action ReformatCode<cr>
+nmap ;g :action ShowIntentionActions<cr>
 
 vmap H ^
 vmap L $
