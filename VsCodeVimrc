@@ -1,9 +1,8 @@
 {
     "workbench.startupEditor": "newUntitledFile",
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "One Dark Pro",
     "tabnine.experimentalAutoImports": true,
-    "editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
+    "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
     "update.enableWindowsBackgroundUpdates": false,
     "update.mode": "manual",
     "editor.linkedEditing": true,
@@ -18,6 +17,14 @@
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         {
+            "before": ["<space>", "f"],
+            "after": ["/"]
+        },
+        {
+            "before": ["<space>", "e"],
+            "after": ["alt", "f8"]
+        },
+        {
             "before": ["H"],
             "after": ["^"]
         },
@@ -30,31 +37,65 @@
             "after": ["<space>", "<space>", "s"]
         },
         {
+            "before": ["f"],
+            "after": ["<space>", "<space>", "l"]
+        },
+        {
+            "before": ["F"],
+            "after": ["<space>", "<space>", "h"]
+        },
+        {
             "before": ["U"],
             "after": ["C-r"]
         },
         {
             "before": ["J"],
-            "after": ["1","0","j"]
+            "after": ["9","j"]
         },
         {
             "before": ["K"],
-            "after": ["1", "0","k"]
+            "after": ["9","k"]
         },
         {
             "before": ["("],
+            "after": ["g", "T"]
+         },
+         {
+            "before": [")"],
+            "after": ["g", "t"]
+         },
+         {
+            "before": [";", "f"],
             "commands": [
                 {
-                    "command": "workbench.action.openPreviousRecentlyUsedEditor",
+                    "command": "editor.action.formatDocument",
                     "args": []
                 }
             ]
          },
          {
-            "before": [")"],
+            "before": [";", "g"],
             "commands": [
                 {
-                    "command": "workbench.action.openNextRecentlyUsedEditor",
+                    "command": "editor.action.quickFix",
+                    "args": []
+                }
+            ]
+         },
+         {
+            "before": ["<space>", "e"],
+            "commands": [
+                {
+                    "command": "editor.action.marker.next",
+                    "args": []
+                }
+            ]
+         },
+         {
+            "before": ["<space>", "t"],
+            "commands": [
+                {
+                    "command": "workbench.action.showCommands",
                     "args": []
                 }
             ]
@@ -72,7 +113,15 @@
                 }
             ]
          },
-
+         {
+            "before": [";", "r"],
+            "commands": [
+                {
+                    "command": "code-runner.run",
+                    "args": []
+                }
+            ]
+         }
     ],
     "vim.insertModeKeyBindings": [
         {
@@ -84,7 +133,16 @@
             "after": ["<Esc>"]
         }
     ],
-    "files.autoSave": "afterDelay",
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["H"],
+            "after": ["^"]
+        },
+        {
+            "before": ["L"],
+            "after": ["$"]
+        }
+    ],
     "prettier.tabWidth": 4,
     "[json]": {
 
@@ -94,7 +152,39 @@
         "editor.suggest.insertMode": "replace",
         "gitlens.codeLens.scopes": [
             "document"
-        ]
+        ],
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "git.autofetch": true,
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "vsnotes.defaultNotePath": "c:\\Users\\temp-02536\\Desktop\\MyNotes",
+    "cSpell.userWords": [
+        "Kumar",
+        "Satyam",
+        "browserslist"
+    ],
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "workbench.colorTheme": "Andromeda Italic Bordered",
+    "redhat.telemetry.enabled": true,
+    "java.project.importOnFirstTimeStartup": "automatic",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
