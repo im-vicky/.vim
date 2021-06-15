@@ -89,7 +89,7 @@ nmap <leader>gl :action Vcs.Show.Log<cr>
 nmap <leader>gd :action com.github.setial.intellijjavadocs.action.JavaDocsGenerateActionOnEditor<cr>
 
 " Terminal
- nmap <leader>t :action SearchEverywhere<cr>
+nmap <leader>t :action SearchEverywhere<cr>
 " Building, Running and Reformatting
 nmap ;r :action Run<cr>
 nmap ;d :action Debug<cr>
@@ -100,3 +100,6 @@ vmap H ^
 vmap L $
 vmap J 10gj
 vmap K 10gk
+vmap R :action Replace<cr>
+vmap ;f :action ReformatCode<cr>
+vmap ;g :action ShowIntentionActions<cr>
