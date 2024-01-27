@@ -1,3 +1,7 @@
+" .ideavimrc is a configuration file for IdeaVim plugin. It uses
+"   the same commands as the original .vimrc configuration.
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
 syntax on
 set incsearch
 set visualbell
@@ -33,73 +37,60 @@ let mapleader = " "
 " let maplocalleader = ","
 
 " let g:EasyMotion_override_acejump = 0
+nmap B %
 
-imap jj <Esc>
-imap kk <Esc>
+nmap ;d <Action>(Debug)
 
-" These create newlines like o and O but stay in normal mode
-nmap q <Esc>
+nmap <leader>e <Action>(GotoNextError)
+nmap <leader>E <Action>(GotoPreviousError)
+
 nmap f <leader><leader>w
 nmap F <leader><leader>b
-nmap <leader>j <leader><leader>j
-nmap <leader>k <leader><leader>k
-nmap H ^
-nmap L $
-nmap J 10j
-nmap K 10k
-nmap B %
-nmap m :action MethodDown<cr>
-nmap M :action MethodUp<cr>
-nmap U :action $Redo<cr>
-nmap R :action Replace<cr>
-" NERDTree Toggle"
-nmap <leader>n :NERDTreeToggle<cr>
-" Closing tabs
-nmap <leader>q :action CloseContent<cr>
-nmap <leader>Q :action ReopenClosedTab<cr>
-" Navigating errors
-nmap <leader>e :action GotoNextError<cr>
-nmap <leader>E :action GotoPreviousError<cr>
-nmap <leader>h :action JumpToLastChange<cr>
-nmap <leader>l :action JumpToNextChange<cr>
 nmap <leader>f /
-nmap ( :action PreviousTab<cr>
-nmap ) :action NextTab<cr>
-nmap <leader>isj o<Esc>k
-nmap <leader>isk O<Esc>j
+nmap ;f <Action>(ReformatCode)
+
+nmap ;g <Action>(ShowIntentionActions)
+nmap <leader>gc <Action>(Generate)
+nmap <leader>gl <Action>(Vcs.Show.Log)
+
+
+nmap <leader>h <Action>(JumpToLastChange)
+nmap H ^
+
+nmap J 10j
+imap jj <Esc>
+nmap <leader>j <leader><leader>j
+nmap ;j <Action>(NextSplitter)
+
+nmap ;k <Action>(PrevSplitter)
+nmap K 10k
+nmap <leader>k <leader><leader>k
+imap kk <Esc>
+
+nmap <leader>l <Action>(JumpToNextChange)
+nmap L $
+
+nmap m <Action>(MethodDown)
+nmap M <Action>(MethodUp)
+nmap U <Action>($Redo)
+
+nmap <leader>n :NERDTreeToggle<cr>
+
+nmap <leader>q <Action>(CloseContent)
+nmap <leader>Q <Action>(ReopenClosedTab)
+
 nmap s <leader><leader>s
 
-" To navigate between split panes
-nmap ;j :action NextSplitter<cr>
-nmap ;k :action PrevSplitter<cr>
+nmap ( <Action>(PreviousTab)
+nmap ) <Action>(NextTab)
 
-" Splits manipulation
-nmap <leader>wh :action SplitHorizontally<cr>
-nmap <leader>wv :action SplitVertically<cr>
-nmap <leader>wc :action Unsplit<cr>
-nmap <leader>wC :action UnsplitAll<cr>
-nmap <leader>wd :action OpenEditorInOppositeTabGroup<cr>
+nmap <leader>re <Action>(RenameElement)
+nmap ;r <Action>(Run)
 
-" Refactorings
-nmap <leader>re :action RenameElement<cr>
-
-" Code generator
-nmap <leader>gc :action Generate<cr>
-nmap <leader>gl :action Vcs.Show.Log<cr>
-nmap <leader>gd :action com.github.setial.intellijjavadocs.action.JavaDocsGenerateActionOnEditor<cr>
-
-" Terminal
-nmap <leader>t :action SearchEverywhere<cr>
-" Building, Running and Reformatting
-nmap ;r :action Run<cr>
-nmap ;d :action Debug<cr>
-nmap ;f :action ReformatCode<cr>
-nmap ;g :action ShowIntentionActions<cr>
-
+vmap ;f <Action>(ReformatCode)
+vmap ;g <Action>(ShowIntentionActions)
 vmap H ^
-vmap L $
 vmap J 10gj
 vmap K 10gk
-vmap R :action Replace<cr>
-vmap ;f :action ReformatCode<cr>
-vmap ;g :action ShowIntentionActions<cr>
+vmap L $
+vmap R <Action>(Replace)
