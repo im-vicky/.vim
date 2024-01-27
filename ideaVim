@@ -44,14 +44,14 @@ nmap ;d <Action>(Debug)
 nmap <leader>e <Action>(GotoNextError)
 nmap <leader>E <Action>(GotoPreviousError)
 
-nmap f <leader><leader>w
-nmap F <leader><leader>b
+nmap f <leader><leader>s
 nmap <leader>f /
 nmap ;f <Action>(ReformatCode)
 
 nmap ;g <Action>(ShowIntentionActions)
-nmap <leader>gc <Action>(Generate)
-nmap <leader>gl <Action>(Vcs.Show.Log)
+nmap gb <Action>(Back)
+nmap gf <Action>(Forward)
+
 
 
 nmap <leader>h <Action>(JumpToLastChange)
@@ -79,7 +79,9 @@ nmap <leader>n :NERDTreeToggle<cr>
 nmap <leader>q <Action>(CloseContent)
 nmap <leader>Q <Action>(ReopenClosedTab)
 
-nmap s <leader><leader>s
+nmap <leader>s <Action>(CodeCompletion)
+nmap s <Action>(FindInPath)
+
 
 nmap ( <Action>(PreviousTab)
 nmap ) <Action>(NextTab)
