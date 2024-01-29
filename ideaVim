@@ -52,8 +52,7 @@ nmap ;g <Action>(ShowIntentionActions)
 nmap gb <Action>(Back)
 nmap gf <Action>(Forward)
 
-
-
+nmap <C-H> :action Back<cr>
 nmap <leader>h <Action>(JumpToLastChange)
 nmap H ^
 
@@ -69,6 +68,7 @@ imap kk <Esc>
 
 nmap <leader>l <Action>(JumpToNextChange)
 nmap L $
+nmap <C-L> :action Forward<cr>
 
 nmap m <Action>(MethodDown)
 nmap M <Action>(MethodUp)
@@ -96,3 +96,4 @@ vmap J 10gj
 vmap K 10gk
 vmap L $
 vmap R <Action>(Replace)
+
