@@ -7,7 +7,6 @@ set incsearch
 set visualbell
 set noerrorbells
 set highlightedyank
-set relativenumber
 set number
 set ignorecase
 set smartcase
@@ -23,7 +22,6 @@ set argtextobj
 set ReplaceWithRegister
 set textobj-entire
 set multiple-cursors
-
 " ShowIntentionActions
 
 " Copy to system clipboard as well
@@ -37,14 +35,26 @@ let mapleader = " "
 " let maplocalleader = ","
 
 " let g:EasyMotion_override_acejump = 0
+
+
+nmap _ <Action>(CollapseRegion)
+nmap + <Action>(ExpandRegion)
+
+nmap b <leader><leader>b
 nmap B %
+nmap <leader>c <Action>(Git.CompareWithBranch)
 
 nmap ;d <Action>(Debug)
 
-nmap <leader>e <Action>(GotoNextError)
-nmap <leader>E <Action>(GotoPreviousError)
+nmap e <Action>(GotoNextError)
+nmap E <Action>(GotoPreviousError)
+nmap <leader>e <Action>(RecentFiles)
 
-nmap f <leader><leader>s
+
+nmap f <leader><leader>f
+nmap F <leader><leader>F
+vmap f <leader><leader>f
+vmap F <leader><leader>F
 nmap <leader>f /
 nmap ;f <Action>(ReformatCode)
 
@@ -60,6 +70,8 @@ nmap J 10j
 imap jj <Esc>
 nmap <leader>j <leader><leader>j
 nmap ;j <Action>(NextSplitter)
+nmap <A-k> <Action>(EditorCloneCaretAbove)
+nmap <A-j> <Action>(EditorCloneCaretBelow)
 
 nmap ;k <Action>(PrevSplitter)
 nmap K 10k
@@ -70,11 +82,12 @@ nmap <leader>l <Action>(JumpToNextChange)
 nmap L $
 nmap <C-L> :action Forward<cr>
 
+nmap <leader>g <Action>(FileStructurePopup)
 nmap m <Action>(MethodDown)
 nmap M <Action>(MethodUp)
 nmap U <Action>($Redo)
 
-nmap <leader>n :NERDTreeToggle<cr>
+nmap <leader>n :NERDTreeToggle<CR>
 
 nmap <leader>q <Action>(CloseContent)
 nmap <leader>Q <Action>(ReopenClosedTab)
@@ -87,7 +100,8 @@ nmap ( <Action>(PreviousTab)
 nmap ) <Action>(NextTab)
 
 nmap <leader>re <Action>(RenameElement)
-nmap ;r <Action>(Run)
+nmap ;r <Action>(Debug)
+nmap R <Action>(QuickJavaDoc)
 
 vmap ;f <Action>(ReformatCode)
 vmap ;g <Action>(ShowIntentionActions)
@@ -96,4 +110,3 @@ vmap J 10gj
 vmap K 10gk
 vmap L $
 vmap R <Action>(Replace)
-
