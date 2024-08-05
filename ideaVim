@@ -61,21 +61,20 @@ nmap ;f <Action>(ReformatCode)
 nmap ;g <Action>(ShowIntentionActions)
 nmap gb <Action>(Back)
 nmap gf <Action>(Forward)
+nmap gi <Action>(GotoImplementation)
 
 nmap <C-H> :action Back<cr>
 nmap <leader>h <Action>(JumpToLastChange)
 nmap H ^
 
 nmap J 10j
+nmap <leader>j <Action>(NextSplitter)
 imap jj <Esc>
-nmap <leader>j <leader><leader>j
-nmap ;j <Action>(NextSplitter)
 nmap <A-k> <Action>(EditorCloneCaretAbove)
 nmap <A-j> <Action>(EditorCloneCaretBelow)
 
-nmap ;k <Action>(PrevSplitter)
+nmap <leader>k <Action>(PrevSplitter)
 nmap K 10k
-nmap <leader>k <leader><leader>k
 imap kk <Esc>
 
 nmap <leader>l <Action>(JumpToNextChange)
@@ -99,7 +98,7 @@ nmap s <Action>(FindInPath)
 nmap ( <Action>(PreviousTab)
 nmap ) <Action>(NextTab)
 
-nmap <leader>re <Action>(RenameElement)
+nmap R <Action>(RenameElement)
 nmap ;r <Action>(Debug)
 nmap R <Action>(QuickJavaDoc)
 
