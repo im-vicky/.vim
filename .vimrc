@@ -1,4 +1,6 @@
 vim.g.mapleader = " "
+vim.opt.timeoutlen = 300 -- Time to wait for a mapped sequence to complete (in milliseconds)
+vim.opt.ttimeoutlen = 0
 
 -- Basic options
 vim.opt.number = true
@@ -29,7 +31,103 @@ require("lazy").setup({
     "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-nvim-lsp",
     "neovim/nvim-lspconfig",
+    "github/copilot.vim",
+    {
+        "CopilotC-Nvim/CopilotChat.nvim",
+        branch = "canary",            -- use the canary branch for latest features
+        dependencies = {
+            { "github/copilot.vim" }, -- you already have this
+            { "nvim-lua/plenary.nvim" },
+        },
+        opts = {
+            -- optional: auto-mount keymaps
+            show_help = true,
+        },
+        keys = {
+            -- Toggle chat split view
+            {
+                "<leader>cc",
+                function() require("CopilotChat").toggle() end,
+                desc = "Copilot Chat: Toggle Split",
+            },
+            {
+                "<leader>ce",
+                mode = { "n", "v" },
+                function()
+                    require("CopilotChat").explain()
+                end,
+                desc = "Explain Code",
+            },
+            {
+                "<leader>cr",
+                mode = { "n", "v" },
+                function()
+                    require("CopilotChat").ask("Review this code and suggest improvements.")
+                end,
+                desc = "Review Code",
+            },
+            {
+                "<leader>ct",
+                mode = { "n", "v" },
+                function()
+                    require("CopilotChat").ask("Write tests for this code.")
+                end,
+                desc = "Generate Tests",
+            },
+        },
+    },
     { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+    {
+        "L3MON4D3/LuaSnip",
+        dependencies = {
+            "rafamadriz/friendly-snippets",
+            "saadparwaiz1/cmp_luasnip",
+        },
+        config = function()
+            require("luasnip.loaders.from_vscode").lazy_load()
+        end,
+    }, {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+        require("bufferline").setup({
+            options = {
+                mode = "tabs",
+                separator_style = "slant",
+                always_show_bufferline = true,
+                show_buffer_close_icons = true,
+                show_close_icon = true,
+                color_icons = true,
+                show_tab_indicators = true,
+                enforce_regular_tabs = true,
+                tab_size = 20,
+                diagnostics = "nvim_lsp",
+                diagnostics_indicator = function(count, level)
+                    local icon = level:match("error") and " " or " "
+                    return " " .. icon .. count
+                end,
+            }
+        })
+    end,
+},
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            "rcarriga/nvim-dap-ui",
+            "mfussenegger/nvim-jdtls",
+            "nvim-neotest/nvim-nio", -- Add this line
+        },
+    },
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = {
+            "nvim-neotest/nvim-nio" -- Add this line
+        },
+        config = function()
+            require("dapui").setup()
+        end,
+    },
     {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -160,6 +258,12 @@ require("lazy").setup({
                 formatters_by_ft = {
                     java = { "google_java_format" },
                 },
+                format_on_save = {
+                    -- Enable auto-formatting on save
+                    timeout_ms = 500,
+                    lsp_fallback = true,
+                    async = false,
+                },
             })
         end,
     },
@@ -205,11 +309,18 @@ require("lazy").setup({
     },
 })
 
--- Replace the existing cmp setup with:
+-- Replace your existing cmp setup with:
 local cmp = require("cmp")
+local luasnip = require("luasnip")
+
 cmp.setup({
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
     mapping = cmp.mapping.preset.insert({
-        ['<TAB>'] = cmp.mapping({
+        ['<Tab>'] = cmp.mapping({
             i = function(fallback)
                 if cmp.visible() then
                     cmp.confirm({ select = true })
@@ -230,9 +341,10 @@ cmp.setup({
         ['<C-j>'] = cmp.mapping.select_next_item(),
         ['<C-k>'] = cmp.mapping.select_prev_item(),
     }),
-    sources = {
+    sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-    },
+        { name = 'luasnip' },
+    }),
 })
 
 -- Mason auto-install LSPs
@@ -260,7 +372,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
--- NvimTree setup
 require("nvim-tree").setup({
     sort_by = "case_sensitive",
     view = {
@@ -272,6 +383,52 @@ require("nvim-tree").setup({
     filters = {
         dotfiles = true,
     },
+    actions = {
+        open_file = {
+            quit_on_open = false,
+            window_picker = {
+                enable = false,
+            },
+        },
+    },
+    on_attach = function(bufnr)
+        local api = require("nvim-tree.api")
+
+        local function opts(desc)
+            return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- Safe file opening function
+        local function safe_open(filepath, cmd)
+            -- Handle swap files and other attention-requiring situations
+            local status, err = pcall(vim.cmd, string.format("%s %s", cmd, vim.fn.fnameescape(filepath)))
+            if not status then
+                -- If there's an error, try to recover
+                vim.cmd('silent! e ' .. vim.fn.fnameescape(filepath))
+            end
+        end
+
+        -- Override the default open behavior
+        vim.keymap.set('n', '<CR>', function()
+            local node = api.tree.get_node_under_cursor()
+            if node.type == 'file' then
+                -- Close the tree view
+                api.tree.close()
+                -- Safely open file in new tab
+                safe_open(node.absolute_path, "tab drop")
+            else
+                api.node.open.edit() -- Keep default behavior for directories
+            end
+        end, opts('Open in new tab'))
+
+        -- Add a mapping for opening in split
+        vim.keymap.set('n', 'v', function()
+            local node = api.tree.get_node_under_cursor()
+            if node.type == 'file' then
+                safe_open(node.absolute_path, "vsplit")
+            end
+        end, opts('Open in vertical split'))
+    end,
 })
 
 -- Disable netrw (recommended by nvim-tree)
@@ -326,10 +483,15 @@ vim.keymap.set("n", ")", "<Cmd>bnext<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "U", "<C-r>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>q", ":confirm q<CR>", { noremap = true, silent = true, desc = "Quit with confirmation" })
 vim.keymap.set("n", "<leader>wq", ":wq<CR>", { noremap = true, silent = true, desc = "Save and quit" })
-vim.keymap.set("n", "<leader>w", ":w!<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-s>", ":w!<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "G", "gg", { noremap = true, silent = true })
 vim.keymap.set("n", "gg", "G", { noremap = true, silent = true })
-vim.keymap.set("n", ";f", vim.lsp.buf.format, { desc = "Format file" })
+vim.keymap.set("n", ";f", function()
+    require("conform").format({
+        async = false,
+        lsp_fallback = true,
+    })
+end, { desc = "Format file" })
 vim.api.nvim_create_autocmd("CmdlineLeave", {
     pattern = "[/?]",
     callback = function()
@@ -366,6 +528,10 @@ vim.keymap.set('n', '<leader>fb', "<cmd>Telescope git_branches<CR>", { desc = "L
 vim.keymap.set('n', ';r', ':RunCode<CR>', { noremap = true, silent = false })
 vim.keymap.set('n', ';rf', ':RunFile<CR>', { noremap = true, silent = false })
 
+-- Add these with your other keymaps
+vim.keymap.set("n", "vae", "ggVG", { noremap = true, silent = true, desc = "Select entire file" })
+vim.keymap.set("v", "ae", "gg0oG$", { noremap = true, silent = true, desc = "Select entire file" })
+
 -- Other UI settings
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -377,17 +543,68 @@ vim.opt.errorbells = false
 vim.opt.clipboard:append("unnamed")
 vim.o.hlsearch = false
 vim.o.incsearch = true
+-- Add with your other vim.opt settings
+vim.opt.showtabline = 2  -- Always show tabs
+vim.opt.tabstop = 4      -- Number of spaces that a <Tab> counts for
+vim.opt.shiftwidth = 4   -- Number of spaces to use for each step of (auto)indent
+vim.opt.expandtab = true -- Convert tabs to spaces
 
+-- Add with your other keymaps
+-- Tab management
+vim.keymap.set('n', '<leader>tn', ':tabnew<CR>', { noremap = true, desc = "New tab" })
+vim.keymap.set('n', '<leader>tc', ':tabclose<CR>', { noremap = true, desc = "Close tab" })
+vim.keymap.set('n', ')', ':tabnext<CR>', { noremap = true, desc = "Next tab" })
+vim.keymap.set('n', '(', ':tabprevious<CR>', { noremap = true, desc = "Previous tab" })
+vim.keymap.set('n', '<leader>to', ':tabo<CR>', { noremap = true, desc = "Close other tabs" })
+
+
+-- Open new files in tabs
+vim.api.nvim_create_autocmd("BufAdd", {
+    callback = function()
+        -- Get all windows
+        local wins = vim.api.nvim_list_wins()
+        -- Get current buffer
+        local current_buf = vim.api.nvim_get_current_buf()
+        -- Check if buffer is already displayed
+        local buf_displayed = false
+        for _, win in ipairs(wins) do
+            if vim.api.nvim_win_get_buf(win) == current_buf then
+                buf_displayed = true
+                break
+            end
+        end
+        -- If buffer is not displayed, open it in a new tab
+        if not buf_displayed then
+            vim.cmd("tabnew")
+        end
+    end
+})
+
+-- Replace the existing QuitPre autocmd with this improved version
 vim.api.nvim_create_autocmd("QuitPre", {
     callback = function()
         local bufnr = vim.api.nvim_get_current_buf()
         local modified = vim.api.nvim_buf_get_option(bufnr, "modified")
+        local readonly = vim.api.nvim_buf_get_option(bufnr, "readonly")
+
         if modified then
             vim.ui.input({
                 prompt = "You have unsaved changes. Save before quitting? (y/n) ",
             }, function(input)
                 if input == "y" then
-                    vim.cmd("write")
+                    if readonly then
+                        -- Handle readonly files
+                        vim.ui.input({
+                            prompt = "File is readonly. Force save? (y/n) ",
+                        }, function(force)
+                            if force == "y" then
+                                vim.cmd("write!")
+                            end
+                        end)
+                    else
+                        -- Normal save for writable files
+                        vim.cmd("write")
+                    end
                 end
             end)
         end
@@ -419,3 +636,53 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.relativenumber = false
     end,
 })
+
+-- Replace your existing jdtls config with this:
+local config = {
+    cmd = { 'C:/Users/anura/AppData/Local/nvim-data/mason/bin/jdtls' },
+    root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
+}
+require('jdtls').start_or_attach(config)
+
+-- Create required directories
+vim.fn.mkdir(vim.fn.expand('~/.cache/jdtls/config'), 'p')
+vim.fn.mkdir(vim.fn.expand('~/.cache/jdtls/workspace'), 'p')
+
+-- Start jdtls only for Java files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "java",
+    callback = function()
+        require('jdtls').start_or_attach(config)
+    end,
+})
+
+-- Add after your LSP configurations
+local dap = require('dap')
+local dapui = require('dapui')
+
+-- Automatically open dap-ui when debugging starts
+dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+end
+
+-- Configure Java debugger
+dap.configurations.java = {
+    {
+        type = 'java',
+        request = 'launch',
+        name = "Debug (Attach) - Remote",
+        hostName = "127.0.0.1",
+        port = 5005,
+    },
+}
+
+-- Add with your other keymaps
+vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+vim.keymap.set('n', '<leader>dc', dap.continue, { desc = "Continue" })
+vim.keymap.set('n', '<leader>di', dap.step_into, { desc = "Step Into" })
+vim.keymap.set('n', 'n', dap.step_over, { desc = "Step Over" }) -- Changed from <leader>do to n
+vim.keymap.set('n', '<leader>dO', dap.step_out, { desc = "Step Out" })
+vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = "Open REPL" })
+vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = "Run Last" })
+vim.keymap.set('n', '<leader>du', dapui.toggle, { desc = "Toggle UI" })
+vim.keymap.set('n', '<leader>dt', dap.terminate, { desc = "Terminate" })
